@@ -1,104 +1,119 @@
-# DeepResearchResultProcessor
+# usage
+1. make sure you have Shell commands plugin in Obsidian
+2. make sure you install "pyscript" foldr into you obsidian vault root directory
 
-A tool for processing technical roadmaps and generating structured learning materials with automated scheduling.
-
-## Description
-
-DeepResearchResultProcessor is a Python application that uses AI to analyze technical roadmaps, extract key concepts, and generate comprehensive learning materials. It automatically schedules learning tasks based on estimated time requirements, creating a structured learning path with deadlines.
-
-The tool processes markdown roadmap files and generates:
-- Detailed markdown files for each technical concept
-- Front matter with tags and scheduled dates
-- An index file linking all concepts
-- A JSON output with all extracted information
-
-## Features
-
-- **AI-Powered Concept Extraction**: Automatically identifies technical concepts from roadmap content
-- **Detailed Concept Analysis**: Extracts prerequisites, learning resources, explanations, and more
-- **Automated Learning Schedule**: Calculates start and deadline dates based on concept complexity
-- **Obsidian-Compatible Output**: Generates markdown files with front matter for use in Obsidian or similar knowledge management tools
-- **Configurable Processing**: Control the number of concepts processed with command-line arguments
-
-## Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/DeepResearchResultProcessor.git
-cd DeepResearchResultProcessor
-
-# Install dependencies
-pip install -r requirements.txt
+convert json styled mark down file into structured obsidian notes:
+```
+python pyScript/obsidian_study_guide_generator/json_to_obsidian.py -i "{{file_name}}" 
 ```
 
-## Usage
-
-```bash
-python DeepResearchResultProcessor.py --input your_roadmap.md --model gpt-4o-mini --api-key your_openai_api_key
+add current folder's notes name to knowledge_index (in case you already have learning notes and want to prevent generate redundant learning notes)
+```
+python pyScript/obsidian_study_guide_generator/UpdateKnowledgeIndex.py "{{folder_path:relative}}"
 ```
 
-### Command-line Arguments
+# compare the Deep Research result
+check the result in deepResearchResults folder on five different platforms on same initial research prompt 
 
-- `--input`, `-i`: Input markdown file path (default: jina_result_.md)
-- `--model`, `-m`: OpenAI model to use (default: gpt-4o-mini)
-- `--api-key`, `-k`: OpenAI API key (overrides environment variable)
-- `--recursion-limit`, `-r`: Maximum number of concepts to process (default: 25)
+| provider   | research time (min) | quality                                                 | view source | cited source | require account |
+| ---------- | ------------------- | ------------------------------------------------------- | ----------- | ------------ | --------------- |
+| gemini     | 3                   | ask follow up questions, give most comprehensive result | 146         | 86           | yes             |
+| openai     | 12                  | ask follow up questions, well written, but no citation  | 31          | ?            | yes             |
+| jina       | 5                   | descent writing                                         | 73          | 4            | no              |
+| perplexity | 2                   | give more specific concept than grok                    | 19          | 19           | yes             |
+| grok       | 2                   | give vague concept name like machine learning basics    | ?           | 13           | yes             |
 
-### Example
 
-```bash
-python DeepResearchResultProcessor.py --input machine_learning_roadmap.md --recursion-limit 10
+
+
+
+# prompt
+## prompt for generate study guide on complex topics
+```
+topic_name = "janus flow"
+Develop a comprehensive roadmap to deeply understand {topic_name}, first try to find high quality papers that relevant to the concepts, extract concepts from papers.
+
+This roadmap should first explain What are the potential benefits, such as career advancement, monetization opportunities, and research prospects, of acquiring knowledge in {topic_name}, then it should list all concepts involved in {topic_name}, organized from foundational to advanced levels.  
+
+To ensure depth and precision, concept names must be specific—avoid broad terms like, probability, machine learning, AI, or text-to-image.  
+Instead, focus on concrete techniques and components such as gradient descent, proximal policy optimization (PPO), multi-head attention, or multi-layer perceptron (MLP).  
+
+For each concept, provide the following details:  
+
+1. Concept Name: A precise and well-defined term.  
+2. Prerequisite Concepts: Names of concepts that should be understood beforehand.  
+3. Learning Resources: working website Links to materials (articles, tutorials, videos).  
+4. High-Level Explanation: A brief but insightful overview of the concept, how the concept relevant to the target topicwhat is the application of this concept.  
+5. Estimated Learning Time: An approximate duration required to grasp the concept (normally take days to fully understand).  
+6. Category: The domain to which the concept belongs (e.g., optimization algorithm, transformer architecture, reinforcement learning, dataset processing).
 ```
 
-## Output
+## prompt for convert study guide into json format
+```
+return the result in json format 
+{
+"main_topic":{
+	"concept_name": str,
+	"category": str
+	"explanation_motivation":"high level explanation and real-world application & opportunities",
+	"approximate_study_time": str,
+	"prerequisites": List[str],
+	"learning_resources": List[str],
+	"study_questions": List[str]
+},
+"prerequisites": {
+	"xxx"{
+		"concept_name": str,
+		"category": str
+		"explanation_motivation":"how this prerequisite involved in main_topic",
+		"approximate_study_time": str,
+		"prerequisites": List[str],
+		"learning_resources": List[str],
+		"study_questions": List[str]
+	},
+	...
+}
 
-The tool generates:
+}
+```
 
-1. A directory named after the input file containing:
-   - Markdown files for each concept with front matter, explanations, resources, and practice questions
-   - An index.md file linking to all concept files
-2. A JSON file with all extracted concept information
-
-### Example Concept Markdown
-
-```markdown
+## prompt for generate simple study guide: 
+```
+concept = "gradient descent"
+I want to learn {concept}
+help me generate a md file in this format
 ---
-start-date: "2025-03-25"
-deadline: "2025-03-29"
+start-date: "2025-03-30"
+deadline: "2025-04-02"
 ---
 
 ## Category
-Machine Learning Algorithm
+Neural Networks
 
 ## Time Needed
-3-5 days
+3 days
 
 ## Prerequisites
-- Linear Algebra
-- Probability Theory
+- [[Neural_Networks|Neural Networks]]
+- [[Backpropagation|Backpropagation]]
+- [[Loss_Functions_eg_Mean_Squared_Error|Loss Functions (e.g., Mean Squared Error)]]
 
 ## Explanation
-Detailed explanation of the concept...
+Autoencoders are a type of neural network used to learn efficient representations of data, typically for the purpose of dimensionality reduction or feature learning. They consist of an encoder that compresses the input into a lower-dimensional representation and a decoder that reconstructs the original input from this representation. Understanding Autoencoders is crucial for grasping how Vector Quantization (VQ) Tokenizers work, as VQ-VAEs (Vector Quantized Variational Autoencoders) leverage the principles of autoencoders to learn discrete latent representations, which are essential for effective tokenization in generative models.
 
 ## Learning Resources
-- Resource 1
-- Resource 2
+- https://www.tensorflow.org/tutorials/generative/autoencoder
+- https://www.coursera.org/learn/deep-learning-specialization
+
 
 ## Practice Questions
-- Question 1
-- Question 2
+- [ ] What are the main components of an autoencoder?
+- [ ] How does the training process of an autoencoder work?
+- [ ] What are the applications of autoencoders in machine learning?
+
+## Notes
 
 ---
-#concept #machine-learning-algorithm
+#concept #neural-networks
 ```
 
-## Dependencies
-
-- Python 3.8+
-- langchain_openai
-- pydantic
-- langgraph
-
-## License
-
-MIT License
