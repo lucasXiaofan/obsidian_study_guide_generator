@@ -4,12 +4,12 @@
 
 convert json styled mark down file into structured obsidian notes:
 ```
-python pyScript/obsidian_study_guide_generator/json_to_obsidian.py -i "{{file_name}}" 
+python py_scripts/obsidian_study_guide_generator/json_to_obsidian.py -i "{{file_name}}" 
 ```
 
 add current folder's notes name to knowledge_index (in case you already have learning notes and want to prevent generate redundant learning notes)
 ```
-python pyScript/obsidian_study_guide_generator/UpdateKnowledgeIndex.py "{{folder_path:relative}}"
+python py_scripts/obsidian_study_guide_generator/UpdateKnowledgeIndex.py "{{folder_path:relative}}"
 ```
 
 # compare the Deep Research result
