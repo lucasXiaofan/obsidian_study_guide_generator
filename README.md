@@ -17,8 +17,8 @@ check the result in deepResearchResults folder on five different platforms on sa
 
 | provider   | research time (min) | quality                                                 | view source | cited source | require account |
 | ---------- | ------------------- | ------------------------------------------------------- | ----------- | ------------ | --------------- |
-| gemini     | 3                   | ask follow up questions, give most comprehensive result | 146         | 86           | yes             |
-| openai     | 12                  | ask follow up questions, well written, but no citation  | 31          | ?            | yes             |
+| gemini     | 3                   | Cover most relevant topics | 146         | 86           | yes             |
+| openai     | 12                  | Cite most relevant sources  | 31          | ?            | yes             |
 | jina       | 5                   | descent writing                                         | 73          | 4            | no              |
 | perplexity | 2                   | give more specific concept than grok                    | 19          | 19           | yes             |
 | grok       | 2                   | give vague concept name like machine learning basics    | ?           | 13           | yes             |
