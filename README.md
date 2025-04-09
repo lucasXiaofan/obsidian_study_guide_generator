@@ -1,6 +1,16 @@
 # usage
 1. make sure you have Shell commands plugin in Obsidian
-2. make sure you install "pyscript" foldr into you obsidian vault root directory
+2. make sure you install "py_scripts" foldr into you obsidian vault root directory
+3. move the "janusflow research json" file from /obsidian_study_guide_generator
+![image](https://github.com/user-attachments/assets/adff8896-3860-4310-b630-f0b7c182f6b3)
+
+to
+root directory of your obsidian vault
+![image](https://github.com/user-attachments/assets/8f211c99-1b6b-478a-bdd9-7a15bf97e5e0)
+
+then press "ctrl" + "p" search for "shell comamnd python py_scripts/obsidian_study_guide_generator/json_to_obsidian.py -i "{{file_name}}" "
+enter
+then you should have study guides generated in your vault! 🥳
 
 convert json styled mark down file into structured obsidian notes:
 ```
